@@ -4,7 +4,6 @@ try:
 except:
     from django.utils import simplejson
     
-from django.db.models import get_model
 import stripe
 from zebra.conf import options
 from zebra.signals import *
@@ -17,7 +16,14 @@ stripe.api_key = options.STRIPE_SECRET
 
 def _try_to_get_customer_from_customer_id(stripe_customer_id):
     if options.ZEBRA_CUSTOMER_MODEL:
-        m = get_model(*options.ZEBRA_CUSTOMER_MODEL.split('.'))
+        try:
+            # django >= 1.7 
+            from django.apps import apps
+            m = apps.get_model(*options.ZEBRA_CUSTOMER_MODEL.split('.'))
+        except ImportError:
+            # django < 1.7
+            from django.db.models import get_model
+            m = get_model(*options.ZEBRA_CUSTOMER_MODEL.split('.'))
         try:
             return m.objects.get(stripe_customer_id=stripe_customer_id)
         except:
@@ -75,7 +81,6 @@ def webhooks_v2(request):
         # Prior to Django 1.4, request.body was named request.raw_post_data
         event_json = simplejson.loads(request.raw_post_data)
     event_key = event_json['type'].replace('.', '_')
-
     if event_key in WEBHOOK_MAP:
         WEBHOOK_MAP[event_key].send(sender=None, full_json=event_json)
 
