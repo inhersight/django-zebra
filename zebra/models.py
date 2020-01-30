@@ -1,3 +1,4 @@
+from builtins import object
 from django.db import models
 
 from zebra import mixins
@@ -7,7 +8,7 @@ from zebra.conf import options
 class StripeCustomer(models.Model, mixins.StripeMixin, mixins.StripeCustomerMixin):
     stripe_customer_id = models.CharField(max_length=50, blank=True, null=True)
 
-    class Meta:
+    class Meta(object):
         abstract = True
 
     def __unicode__(self):
@@ -17,7 +18,7 @@ class StripeCustomer(models.Model, mixins.StripeMixin, mixins.StripeCustomerMixi
 class StripePlan(models.Model, mixins.StripeMixin, mixins.StripePlanMixin):
     stripe_plan_id = models.CharField(max_length=50, blank=True, null=True)
 
-    class Meta:
+    class Meta(object):
         abstract = True
 
     def __unicode__(self):
@@ -29,7 +30,7 @@ class StripeSubscription(models.Model, mixins.StripeMixin, mixins.StripeSubscrip
     You need to provide a stripe_customer attribute. See zebra.models for an
     example implimentation.
     """
-    class Meta:
+    class Meta(object):
         abstract = True
 
 
@@ -39,7 +40,7 @@ if options.ZEBRA_ENABLE_APP:
         date_created = models.DateTimeField(auto_now_add=True)
         date_modified = models.DateTimeField(auto_now=True)
 
-        class Meta:
+        class Meta(object):
             abstract = True
 
     class Customer(DatesModelBase, StripeCustomer):

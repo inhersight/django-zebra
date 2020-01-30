@@ -1,3 +1,4 @@
+from builtins import object
 from django.forms.widgets import Select, TextInput
 from django.utils.safestring import mark_safe
 
@@ -18,7 +19,7 @@ class NoNameWidget(object):
     def _strip_name_attr(self, widget_string, name):
         return widget_string.replace("name=\"%s\"" % (name,), "")
 
-    class Media:
+    class Media(object):
         css = {
             'all': ('zebra/card-form.css',)
         }

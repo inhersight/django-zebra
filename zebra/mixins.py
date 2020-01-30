@@ -1,3 +1,4 @@
+from builtins import object
 import stripe
 
 from zebra.conf import options

@@ -1,6 +1,7 @@
 """
 Default settings for zebra
 """
+from builtins import range
 import datetime
 import os
 
@@ -29,7 +30,7 @@ ZEBRA_AUTO_CREATE_STRIPE_CUSTOMERS = getattr(_settings,
 
 _today = datetime.date.today()
 ZEBRA_CARD_YEARS = getattr(_settings, 'ZEBRA_CARD_YEARS',
-    range(_today.year, _today.year+12))
+    list(range(_today.year, _today.year+12)))
 ZEBRA_CARD_YEARS_CHOICES = getattr(_settings, 'ZEBRA_CARD_YEARS_CHOICES',
     [(i,i) for i in ZEBRA_CARD_YEARS])
 
